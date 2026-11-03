@@ -1,14 +1,11 @@
 # WireShark Packet Capturing
 
-**Intern ID:** [add your Intern ID here]
-
-Capturing network traffic in Wireshark and reading it to answer SOC-style questions: who is attacking, what they are attacking, and what a person on the same network can see. I did this as a set of hands-on Wireshark SOC labs from Networkwalks during my Cybersecurity Internship.
+Capturing network traffic in Wireshark and reading it to answer SOC-style questions like; who is attacking ?, what they are attacking ?, and what a person on the same network can see. I did this as a set of hands-on Wireshark SOC labs from Networkwalks during my Cybersecurity Internship.
 
 The labs were optional. I did them anyway to upskill, to learn how to capture packets, and to get comfortable with the Wireshark interface after watching the Wireshark video course the labs link to.
 
----
 
-## The lab at a glance
+## The Lab Details 
 
 | Item | Detail |
 |---|---|
@@ -16,18 +13,16 @@ The labs were optional. I did them anyway to upskill, to learn how to capture pa
 | Where it ran | A Windows 11 PC inside the Networkwalks lab (I signed in to it from the lab page) |
 | Labs covered | Lab 3 to Lab 8 (six labs) |
 | Format | 10 tasks per lab, 10 marks each, 100 marks per lab |
-| Dates | 31 October 2026 (Labs 3 to 7), 2 November 2026 (Lab 8) |
+| Dates | 31 October 2026 (Labs 3 to 7) |
 | Prep | Wireshark Full Course with Practice Labs (video playlist linked from each lab) |
-
----
 
 ## Starting point: the lab login page
 
 Every lab starts the same way. The lab shows a Windows sign-in screen for a user called "Student". Task 1 of each lab is to sign in, start Wireshark and capture the traffic, then report how many packets were captured. The sign-in hint shown under the password box is blurred out in this screenshot.
 
-![Lab login page with the password hint blurred](images/01-login-page.png)
+![](01-login-page.png)
 
----
+
 
 ## Lab 3: Identify the Attacker's IP
 
@@ -43,15 +38,15 @@ Every lab starts the same way. The lab shows a Windows sign-in screen for a user
 
 I used Statistics > Conversations (TCP tab) to see every connection from the attacker in one table.
 
-![Statistics > Conversations showing the attacker's connections](images/02-lab3-conversations.png)
+![](02-lab3-conversations.png)
 
-![Filter tcp.flags.syn == 1 on the capture](images/03-lab3-syn-filter.png)
+![](03-lab3-syn-filter.png)
 
 **Result: 90 / 100.** I lost 10 marks on task 2, "Show only SYN packets". I typed `tcp.flags.syn == 1`. That filter also matches the SYN,ACK replies from the server, so it does not show only the scanner's SYN packets. I have not checked the lab's answer key, but the likely fix is `tcp.flags.syn == 1 && tcp.flags.ack == 0`.
 
-![Lab 3 result](images/04-lab3-result.png)
+![](04-lab3-result.png)
 
----
+
 
 ## Lab 4: Follow TCP Stream
 
@@ -65,13 +60,13 @@ I used Statistics > Conversations (TCP tab) to see every connection from the att
 - In Follow TCP Stream, text sent by the client (the PC that started the chat) is red.
 - The chat was readable by anyone on the network. It included a staff member asking for help with the Finance drive and passwords being shared in plain text. I have left the passwords out of this README and the screenshots.
 
-![Filter tcp.port == 5000](images/05-lab4-tcp-port-5000.png)
+![](05-lab4-tcp-port-5000.png)
 
 **Result: 100 / 100.**
 
-![Lab 4 result](images/06-lab4-result.png)
+![](06-lab4-result.png)
 
----
+
 
 ## Lab 5: Follow TCP Stream, part 2
 
@@ -85,13 +80,13 @@ I used Statistics > Conversations (TCP tab) to see every connection from the att
 - The second stream (stream 11) was a downloaded text file, `/download/report.txt`. Following it showed who prepared the report.
 - I have not reproduced the access code from the comment here.
 
-![Filter http on the intranet traffic](images/07-lab5-http-filter.png)
+![](07-lab5-http-filter.png)
 
 **Result: 100 / 100.**
 
-![Lab 5 result](images/08-lab5-result.png)
+![](08-lab5-result.png)
 
----
+
 
 ## Lab 6: HTTP plain text credentials
 
@@ -105,13 +100,13 @@ I used Statistics > Conversations (TCP tab) to see every connection from the att
 - In the packet details pane, the line "HTML Form URL Encoded" holds the typed username and password in clear text. The username was `farhan.k`. I have not printed the password.
 - The fix is HTTPS, so the form data is encrypted on the wire.
 
-![Filter http.request showing the POST /login packets](images/09-lab6-http-request.png)
+![](09-lab6-http-request.png)
 
 **Result: 100 / 100.**
 
-![Lab 6 result](images/10-lab6-result.png)
+![](10-lab6-result.png)
 
----
+
 
 ## Lab 7: Brute force catch
 
@@ -127,13 +122,13 @@ I used Statistics > Conversations (TCP tab) to see every connection from the att
 - One attempt got "230 Login successful", so the attacker got in. The attack type is brute force.
 - I used `ftp.request` and `ftp.response` to separate what the attacker sent from what the server answered.
 
-![Statistics > Protocol Hierarchy](images/11-lab7-protocol-hierarchy.png)
+![](11-lab7-protocol-hierarchy.png)
 
 **Result: 100 / 100.**
 
-![Lab 7 result](images/12-lab7-result.png)
+![](12-lab7-result.png)
 
----
+
 
 ## Lab 8: VoIP call replay
 
@@ -149,13 +144,13 @@ I used Statistics > Conversations (TCP tab) to see every connection from the att
 - The RTP Player (Telephony menu) played the call back. The conversation, including something sensitive that was spoken aloud, could be heard by anyone who captured it. I have left that detail out.
 - The fix: encrypt the call with SRTP.
 
-![sip.Call-ID filter showing the call flow](images/13-lab8-sip-call.png)
+![](13-lab8-sip-call.png)
 
-![RTP Player with both directions of the call](images/14-lab8-rtp-player.png)
+![](14-lab8-rtp-player.png)
 
 **Result: 90 / 100.** I got task 4, "Caller extension", wrong. The caller's extension is in the "From" line of the INVITE.
 
-![Lab 8 result](images/15-lab8-result.png)
+![](15-lab8-result.png)
 
 ---
 
